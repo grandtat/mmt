@@ -13,7 +13,7 @@ class FeatureMatcherGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Feature Matcher")
-        self.showFullScreen()  # Open the UI in fullscreen mode
+        self.showMaximized()  # Use the entire available screen instead of fullscreen
         self.installEventFilter(self)  # Install event filter for key press handling
         
         # Variables
