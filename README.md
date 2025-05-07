@@ -1,4 +1,9 @@
-# mmt
+# MMT - Multimediatechnik DHSN
+
+##
+
+Scripts for the DHSN Module MMT.
+Not included are the Pictures used in the Lecutre. Download them from the OPAL-Course.
 
 ## Setting up a Python Virtual Environment
 
