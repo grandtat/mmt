@@ -1,0 +1,11 @@
+PyQt5
+opencv-python
+Pillow
+numpy
+cv2
+matplotlib
+imutils
+glob
+sys
+PIL
+tkinter
