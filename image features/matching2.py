@@ -6,13 +6,15 @@ from PyQt5.QtWidgets import (
     QWidget, QFileDialog, QComboBox, QStatusBar
 )
 from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QEvent
 
 
 class FeatureMatcherGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Feature Matcher")
+        self.showFullScreen()  # Open the UI in fullscreen mode
+        self.installEventFilter(self)  # Install event filter for key press handling
         
         # Variables
         self.img1 = None
@@ -24,28 +26,36 @@ class FeatureMatcherGUI(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         
         # Image display
-        self.image_layout = QHBoxLayout()
+        self.image_layout = QVBoxLayout()  # Change to vertical layout
+        self.top_image_layout = QHBoxLayout()  # Add a horizontal layout for the top images
         self.img1_label = QLabel("Bild 1")
         self.img1_label.setAlignment(Qt.AlignCenter)
         self.img2_label = QLabel("Bild 2")
         self.img2_label.setAlignment(Qt.AlignCenter)
         self.result_label = QLabel("Matches")
         self.result_label.setAlignment(Qt.AlignCenter)
-        self.image_layout.addWidget(self.img1_label)
-        self.image_layout.addWidget(self.img2_label)
+        
+        # Add image1 and image2 to the top layout
+        self.top_image_layout.addWidget(self.img1_label)
+        self.top_image_layout.addWidget(self.img2_label)
+        
+        # Add the top layout and result label to the main image layout
+        self.image_layout.addLayout(self.top_image_layout)
         self.image_layout.addWidget(self.result_label)
         self.layout.addLayout(self.image_layout)
         
         # Controls
-        self.control_layout = QVBoxLayout()
+        self.control_layout = QHBoxLayout()  # Horizontal layout for side-by-side controls
         
         # Load image buttons
+        self.load_buttons_layout = QVBoxLayout()  # Vertical layout for load buttons
         self.load_img1_btn = QPushButton("Bild 1 laden")
         self.load_img1_btn.clicked.connect(lambda: self.load_image(1))
         self.load_img2_btn = QPushButton("Bild 2 laden")
         self.load_img2_btn.clicked.connect(lambda: self.load_image(2))
-        self.control_layout.addWidget(self.load_img1_btn)
-        self.control_layout.addWidget(self.load_img2_btn)
+        self.load_buttons_layout.addWidget(self.load_img1_btn)
+        self.load_buttons_layout.addWidget(self.load_img2_btn)
+        self.control_layout.addLayout(self.load_buttons_layout)  # Add load buttons layout to control layout
         
         # Feature method selection
         self.method_label = QLabel("Feature-Methode:")
@@ -67,7 +77,7 @@ class FeatureMatcherGUI(QMainWindow):
         self.match_btn.clicked.connect(self.match_features)
         self.control_layout.addWidget(self.match_btn)
         
-        self.layout.addLayout(self.control_layout)
+        self.layout.addLayout(self.control_layout)  # Add the control layout to the main layout
         
         # Status bar
         self.status_bar = QStatusBar()
@@ -173,6 +183,11 @@ class FeatureMatcherGUI(QMainWindow):
         self.show_image(result_img, self.result_label)
         self.status_bar.showMessage(f"{method} + {matcher_type}: {len(matches)} Matches gefunden")
         cv2.imwrite("match_eval.png", cv2.cvtColor(result_img, cv2.COLOR_RGB2BGR))
+
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.KeyPress and event.key() == Qt.Key_Escape:
+            self.close()  # Close the application when Esc is pressed
+        return super().eventFilter(source, event)
 
 
 if __name__ == "__main__":
