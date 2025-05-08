@@ -150,7 +150,7 @@ class FeatureMatcherGUI(QMainWindow):
             else:
                 matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
             matches = matcher.match(desc1, desc2)
-            matches = sorted(matches, key=lambda x: x.distance)[:50]
+            matches = sorted(matches, key=lambda x: x.distance)[:250]    # Keep only the best 50 matches
             
         else:  # FLANN
             # Set FLANN parameters
@@ -168,7 +168,7 @@ class FeatureMatcherGUI(QMainWindow):
             
             flann = cv2.FlannBasedMatcher(index_params, search_params)
             matches = flann.match(desc1, desc2)
-            matches = sorted(matches, key=lambda x: x.distance)[:50]
+            matches = sorted(matches, key=lambda x: x.distance)[:250]
         
         # Create result image
         result_img = cv2.drawMatches(

@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFileDialog, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFileDialog, QVBoxLayout, QHBoxLayout, QWidget
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 
@@ -23,37 +23,43 @@ class HomographyApp(QMainWindow):
         # Main widget and layout
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
-        self.layout = QVBoxLayout(self.central_widget)
+        self.main_layout = QVBoxLayout(self.central_widget)
         
-        # Buttons
+        # Button layout (side by side)
+        self.button_layout = QHBoxLayout()
         self.btn_load1 = QPushButton("Load Image 1")
         self.btn_load1.clicked.connect(self.load_image1)
-        self.layout.addWidget(self.btn_load1)
+        self.button_layout.addWidget(self.btn_load1)
         
         self.btn_load2 = QPushButton("Load Image 2")
         self.btn_load2.clicked.connect(self.load_image2)
-        self.layout.addWidget(self.btn_load2)
+        self.button_layout.addWidget(self.btn_load2)
         
         self.btn_transform = QPushButton("Transform")
         self.btn_transform.setEnabled(False)
         self.btn_transform.clicked.connect(self.compute_homography)
-        self.layout.addWidget(self.btn_transform)
+        self.button_layout.addWidget(self.btn_transform)
         
-        # Image display labels
+        self.main_layout.addLayout(self.button_layout)
+        
+        # Image layout (side by side)
+        self.image_layout = QHBoxLayout()
         self.label_img1 = QLabel()
         self.label_img1.setFixedSize(400, 300)
         self.label_img1.setStyleSheet("background-color: gray;")
-        self.layout.addWidget(self.label_img1)
+        self.image_layout.addWidget(self.label_img1)
         
         self.label_img2 = QLabel()
         self.label_img2.setFixedSize(400, 300)
         self.label_img2.setStyleSheet("background-color: gray;")
-        self.layout.addWidget(self.label_img2)
+        self.image_layout.addWidget(self.label_img2)
         
         self.label_result = QLabel()
         self.label_result.setFixedSize(400, 300)
         self.label_result.setStyleSheet("background-color: gray;")
-        self.layout.addWidget(self.label_result)
+        self.image_layout.addWidget(self.label_result)
+        
+        self.main_layout.addLayout(self.image_layout)
     
     def load_image1(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Image 1", "", "Image Files (*.jpg *.png *.jpeg)")
