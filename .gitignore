@@ -2,6 +2,10 @@
 *.png
 *.jpg
 *.jpeg
+*.mp4
+
+# dont upload ffmpg
+ffmpg/
 
 
 # Byte-compiled / optimized / DLL files
